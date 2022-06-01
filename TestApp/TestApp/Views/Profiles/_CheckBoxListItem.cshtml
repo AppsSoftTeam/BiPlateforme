@@ -1,0 +1,14 @@
+﻿@model  TestApp.ViewModels.CheckBoxListItem
+
+<table id="chk">
+    <tr>
+        <td>
+            <input type="checkbox" id="@Model.ID" name="PriorInsuranceCompaniesSelected" value="@Model.ID" @(Model.IsChecked ? "checked" : "") />
+            <label for="@Model.ID" class="check">
+                @Model.Display
+            </label>
+        </td>
+    </tr>
+
+</table>
+

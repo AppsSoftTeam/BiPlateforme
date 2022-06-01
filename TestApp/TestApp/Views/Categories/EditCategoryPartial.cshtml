@@ -1,0 +1,62 @@
+﻿@model TestApp.Models.Category
+
+<div class="modal fade" id="myModalEdit" role="dialog">
+    <div class="modal-dialog modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalEdit-label">Modifier</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="EditCategory" id="EditCategory">
+                    <div class="form-row">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.CategoryId)
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-6">Nom de categorie</label>
+                            <div class="col-sm-10">
+                                @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-6">Nom de direction</label>
+                            <div class="col-sm-10">
+                                @Html.DropDownList("DirectionId", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DirectionId, "", new { @class = "text-danger" })
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancelEdit" type="button" class="btn rounded-pill btn-danger" data-dismiss="modal">Annuler</button>
+                <button id="btnEdit" type="button" class="btn rounded-pill btn-primary" data-save="modal">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btnEdit").click(function () {
+            var categoryFormData = $("#EditCategory").serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "/Categories/SaveEditCategory",
+                data: categoryFormData,
+                success: function () {
+                    // window.location.href = "~/Directions/Index";
+                    alert("Direction créée")
+                }
+            })
+        });
+        $("#btnCancelEdit").click(function () {
+            window.location.href = "~/Directions/Index";
+        });
+    });
+</script>

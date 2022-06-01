@@ -1,0 +1,108 @@
+﻿@model TestApp.ViewModels.LogOnModel
+
+@{
+    ViewBag.Title = "LogOn";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GlobalNet Reporting </title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/AdminLTE-3.2.0/AdminLTE-3.2.0/dist/css/adminlte.min.css">
+    <link rel="shortcut icon" href="~/téléchargement.png">
+
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <!-- /.login-logo -->
+        <div class="card card-outline card-orange">
+            <div class="card-header text-center">
+                <img src="~/téléchargement.png" height="80" />
+            </div>
+            <div class="card-body">
+                <p class="login-box-msg">Démarrer votre session</p>
+                @using (Html.BeginForm("LogOn", null, FormMethod.Post))
+                {
+                    <form method="post">
+                        <div class="input-group mb-3">
+                            <input type="text" name="UserName" class="form-control" id="UserName" placeholder="Login">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <a class="text-orange"><i class="fa fa-user" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3" id="show_hide_password">
+                            <input type="password" name="Password" class="form-control" id="Password" placeholder="Mot de passe">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <a class="text-orange"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <!-- /.col -->
+
+                            <button type="submit" class="btn btn-outline-danger rounded-pill">Se connecter</button>
+
+
+                            <!-- /.col -->
+                        </div>
+                    </form>
+
+                    <br />
+                    if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+                    {
+                        <div class="alert alert-danger" role="alert" style="width:310px; height:60px">
+                            <a class="close" data-dismiss="alert">×</a>
+                            @foreach (var modelError in Html.ViewData.ModelState.SelectMany(keyValuePair => keyValuePair.Value.Errors))
+                            {
+                                <p>@modelError.ErrorMessage</p>
+                            }
+                        </div>
+                    }
+                }
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+        <!-- /.login-box -->
+        <!-- jQuery -->
+        <script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap 4 -->
+        <script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/dist/js/adminlte.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#show_hide_password a").on('click', function (event) {
+                    event.preventDefault();
+                    if ($('#show_hide_password input').attr("type") == "text") {
+                        $('#show_hide_password input').attr('type', 'password');
+                        $('#show_hide_password i').addClass("fa-eye-slash");
+                        $('#show_hide_password i').removeClass("fa-eye");
+                    } else if ($('#show_hide_password input').attr("type") == "password") {
+                        $('#show_hide_password input').attr('type', 'text');
+                        $('#show_hide_password i').removeClass("fa-eye-slash");
+                        $('#show_hide_password i').addClass("fa-eye");
+                    }
+                });
+            });
+        </script>
+
+</body>
+</html>

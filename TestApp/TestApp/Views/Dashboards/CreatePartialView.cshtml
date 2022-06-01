@@ -1,0 +1,80 @@
+﻿@model TestApp.Models.Dashboard
+
+
+
+
+<div class="modal fade" id="myModalCreate" role="dialog">
+    <div class="modal-dialog modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalCreate-label">Nouveau</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="dashboardForm">
+                    <div class="form-row">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group col-md-10">
+                            @Html.LabelFor(model => model.DashboardName, htmlAttributes: new { @class = "control-label col-md-10" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.DashboardName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.DashboardName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-10">
+                            @Html.LabelFor(model => model.WorkSpaceid, htmlAttributes: new { @class = "control-label col-md-10" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.WorkSpaceid, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.WorkSpaceid, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group col-md-10">
+                            @Html.LabelFor(model => model.Reportid, htmlAttributes: new { @class = "control-label col-md-10" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Reportid, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Reportid, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group col-md-10">
+                            <label class="form-label">Categorie</label>
+                            <div class="col-md-10 ">
+                                @Html.DropDownList("CategoryId", null, "- - Selectionner - -", htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancel" type="button" class="btn rounded-pill btn-danger" data-dismiss="modal">Annuler</button>
+                <button id="btnSave" type="button" class="btn rounded-pill btn-primary">Enregistrer</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#btnSave").click(function () {
+                    var dashboardFormData = $("#dashboardForm").serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Dashboards/SaveDashboard",
+                        data: dashboardFormData,
+                        success: function () {
+                            // window.location.href = "/Dashboards/Index";
+                            alert('dashborad crée')
+                        }
+                    })
+                });
+
+                $("#btnCancel").click(function () {
+                    window.location.href = "/Dashboards/Index";
+                });
+            });
+</script>
+

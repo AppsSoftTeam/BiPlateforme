@@ -1,0 +1,71 @@
+﻿@model TestApp.Models.Dashboard
+
+<div class="modal fade" id="myModalDelete" role="dialog">
+    <div class="modal-dialog modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalDelete-label">Voulez-vous supprimer ce dashboard?</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="DeleteDashboard">
+                    @Html.HiddenFor(model => model.DashboardId)
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-6">@Html.DisplayNameFor(model => model.DashboardName) :</label>
+                        <div class="col-sm-10">
+                            <div>@Html.DisplayFor(model => model.DashboardName)</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-6">@Html.DisplayNameFor(model => model.Category.CategoryName) : </label>
+                        <div class="col-sm-10">
+                            <div>@Html.DisplayFor(model => model.Category.CategoryName)</div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-6">@Html.DisplayNameFor(model => model.WorkSpaceid) :</label>
+                        <div class="col-sm-10">
+                            <div>@Html.DisplayFor(model => model.WorkSpaceid)</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-6">@Html.DisplayNameFor(model => model.Reportid) :</label>
+                        <div class="col-sm-10">
+                            <div>@Html.DisplayFor(model => model.Reportid)</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancel" type="button" class="btn rounded-pill btn-danger" data-dismiss="modal">Annuler</button>
+                <button id="btnDelete" type="button" class="btn rounded-pill btn-primary" data-save="modal">Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btnDelete").click(function () {
+            var dashboardFormData = $("#DeleteDashboard").serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "/Dashboards/SaveDeleteDashboard",
+                data: dashboardFormData,
+                success: function () {
+                    // window.location.href = "~/Directions/Index";
+                    alert("Direction créée")
+                }
+            })
+        });
+        $("#btnCancelSave").click(function () {
+            window.location.href = "~/Directions/Index";
+        });
+    });
+</script>

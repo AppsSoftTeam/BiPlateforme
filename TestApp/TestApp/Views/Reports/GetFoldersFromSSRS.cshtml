@@ -1,0 +1,154 @@
+﻿@model IEnumerable<TestApp.ViewModels.FoldersVM>
+
+
+
+
+<div class="modal fade" id="myModalCreate" role="dialog">
+    <div class="modal-dialog modal-dialog modal-dialog-centered note-modal-content-large">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalCreate-label">Ajouter nouveau rapport</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="profileForm">
+                    <div id="PlaceHolderHere"></div>
+                    <table id="example1" class="table table-bordered table-hover" style="font-size:small">
+
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FolderName)
+                                </th>
+                                <th>@Html.DisplayNameFor(model => model.Path)</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>@Html.DisplayFor(modelItem => item.FolderName)</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Path)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/jszip/jszip.min.js"></script>
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="~/AdminLTE-3.2.0/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "language": {
+                "decimal": "",
+                "emptyTable": "Aucun enregistrements correspondants trouvés",
+                "info": "Affiche _START_ à _END_ de _TOTAL_ entrées",
+                "infoEmpty": "Affichage de 0 à 0 sur 0 entrées",
+                "infoFiltered": "(filtered from _MAX_ total entries)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Affiche _MENU_ entrées",
+                "loadingRecords": "Chargement...",
+                "processing": "Processing...",
+                "search": "Rechercher:",
+                "zeroRecords": "Aucun enregistrements correspondants trouvés",
+                "buttons": {
+                    "copy": "Copie",
+                    "excel": "Exceller",
+                    "pdf": "PDF",
+                    "print": "Imprimer",
+                    "colvis": "Visibility de la colonne",
+                },
+                "paginate": {
+                    "first": "First",
+                    "last": "Last",
+                    "next": "Suivant",
+                    "previous": "Précédent"
+                },
+                "aria": {
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
+                }
+            },
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var table = document.getElementsByTagName("table")[0];
+        var tbody = table.getElementsByTagName("tbody")[0];
+        tbody.onclick = function (e) {
+            e = e || window.event;
+            let formData = new FormData()
+            var target = e.srcElement || e.target;
+            while (target && target.nodeName !== "TR") {
+                target = target.parentNode;
+            }
+            if (target) {
+                var cells = target.getElementsByTagName("td");
+                formData.append('Foldername', cells[0].innerHTML);
+
+            }
+            console.log(formData)
+
+            $.ajax({
+                type: "POST",
+                url: "/Reports/GetReportsSSRS",
+                data: formData,
+                contentType: false,
+                processData: false,
+                cache: false,
+                success: function (result) {
+                    window.location.href = "/Reports/GetReportsSSRS";
+                }
+            })
+        };
+        /*
+
+        $("#btnCancelSave").click(function () {
+            window.location.href = "/Profiles/Index";
+        });*/
+    });
+</script>
+
+
+
+

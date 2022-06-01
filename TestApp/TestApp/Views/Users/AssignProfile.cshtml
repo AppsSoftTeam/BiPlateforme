@@ -1,0 +1,94 @@
+﻿@model TestApp.ViewModels.UserProfilFormViewModel
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModal-label">Nouveau</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="AssignProfilePartial">
+                    <fieldset class="form-group">
+                        @Html.HiddenFor(model => model.UId)
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-6 text-sm-right">Nom utilisateur</label>
+                            <div class="col-sm-10">
+                                @Html.EditorFor(model => model.UserDisplayName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.UserDisplayName, "", new { @class = "text-danger" })
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-form-label col-sm-6 text-sm-right pt-sm-0">Profiles :</label>
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="col-md-12">
+                                        @foreach (TestApp.ViewModels.CheckBoxListItem a in Model.Profiles)
+                                        {
+                                            @Html.Partial("_CheckBoxProfiletItem", a)
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancel" type="button" class="btn rounded-pill btn-danger" data-dismiss="modal">Annuler</button>
+                <button id="Enregistrer" type="button" class="btn rounded-pill btn-primary" data-save="modal">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+        $(function () {
+
+            $("#Enregistrer").click(function () {
+                var ProfileList = [];
+
+                var checked_checkboxes = $("[id*=chk] input:checked");
+
+                checked_checkboxes.each(function () {
+                    var v = $(this).val();
+
+                    ProfileList.push(v);
+                });
+
+                console.log(ProfileList);
+
+                var uId = document.getElementById("UId").value;
+                var UserDisplayName = document.getElementById("UserDisplayName").value;
+
+                var vmEdit = {
+                    "UId": uId,
+                    "UserDisplayName": UserDisplayName,
+                    "Pro": ProfileList,
+
+                }
+
+                $.ajax({
+
+                    type: 'POST',
+                    url: '@Url.Action("SaveChange")',
+                    dataType: 'json',
+                    data: vmEdit,
+
+                    success: function (data) {
+                        window.location.href = "/Users/Index";
+
+                    },
+
+                });
+
+            });
+
+        });
+
+</script>
+

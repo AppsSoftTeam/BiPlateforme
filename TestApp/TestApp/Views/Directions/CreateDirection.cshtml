@@ -1,0 +1,57 @@
+﻿@model TestApp.Models.Direction
+
+
+
+
+
+<div class="modal fade" id="myModalCreate" role="dialog">
+    <div class="modal-dialog modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalCreate-label">Créer nouveau</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="directionForm">
+                    <div class="form-row">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.DirectionName, htmlAttributes: new { @class = "control-label col-md-10" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.DirectionName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.DirectionName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancelSave" type="button" class="btn rounded-pill btn-danger" data-dismiss="modal">Annuler</button>
+                <button id="btnSave" type="button" class="btn rounded-pill btn-primary">Enregistrer</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btnSave").click(function () {
+            var directionFormData = $("#directionForm").serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "/Directions/SaveDirection",
+                data: directionFormData,
+                success: function () {
+                    // window.location.href = "~/Directions/Index";
+                    alert("Direction créée")
+                }
+            })
+        });
+        $("#btnCancelSave").click(function () {
+            window.location.href = "~/Directions/Index";
+        });
+    });
+</script>

@@ -1,0 +1,76 @@
+﻿@model TestApp.Models.Profile
+
+<div class="modal fade" id="myModalCreate" role="dialog">
+    <div class="modal-dialog modal-dialog modal-dialog-centered note-modal-content-large">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalCreate-label">Créer nouveau profile</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="profileForm">
+                    <div class="form-row">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            <div class="input-group">
+                                @Html.LabelFor(model => model.ProfilName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.ProfilName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ProfilName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="col-md-12">
+                                    @foreach (var category in ViewBag.Categories)
+                                    {
+
+
+                                        <label class="custom-control custom-checkbox m-0">
+
+                                            <input type="checkbox" class="custom-control-input" name="CategoryId" value="@category.CategoryId">
+
+                                            <span class="custom-control-label">@category.CategoryName => Direction : @category.Direction.DirectionName</span>
+
+
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancelSave" type="button" class="btn rounded-pill btn-danger" data-dismiss="modal">Annuler</button>
+                <button id="btnSave" type="button" class="btn rounded-pill btn-primary">Enregistrer</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnSave").click(function () {
+            var profileFormData = $("#profileForm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Profiles/SaveProfile",
+                data: profileFormData,
+                success: function () {
+                    window.location.href = "/Profiles/Index";
+                }
+            })
+        });
+        $("#btnCancelSave").click(function () {
+            window.location.href = "/Profiles/Index";
+        });
+    });
+</script>

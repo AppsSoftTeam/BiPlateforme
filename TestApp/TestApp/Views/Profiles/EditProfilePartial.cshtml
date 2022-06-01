@@ -1,0 +1,110 @@
+﻿@model TestApp.ViewModels.ProfilCategoryFormViewModel
+
+
+<div class="modal fade" id="myModalEdit" role="dialog">
+    <div class="modal-dialog modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalEdit-label">Modifier</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="EditProfile">
+                    <div class="form-row">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <input type="hidden" id="ProId" value="@Model.ProId" />
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-6 text-sm-right">Nom de profile</label>
+                            <div class="col-sm-10">
+                                @Html.EditorFor(model => model.ProDisplayName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ProDisplayName, "", new { @class = "text-danger" })
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="col-md-12">
+                                    @foreach (TestApp.ViewModels.CheckBoxListItem a in Model.Categories)
+                                    {
+                                        @Html.Partial("_CheckBoxListItem", a)
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="col-md-12">
+                                    @foreach (TestApp.ViewModels.CheckBoxListItem t in Model.ObjectifTypes)
+                                    {
+                                        @Html.Partial("_CheckBoxListType", t)
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancelEdit" type="button" class="btn rounded-pill btn-danger" data-dismiss="modal">Annuler</button>
+                <button type="submit" id="Enregistrer" class="btn rounded-pill btn-primary" data-save="modal">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+        $(function () {
+
+            $("#Enregistrer").click(function () {
+                var CategoryList = [];
+                var TypeList = [];
+
+                var checked_checkboxes = $("[id*=chk] input:checked");
+                var checkboxesType = $("[id*=type] input:checked");
+
+                checked_checkboxes.each(function () {
+                    var v = $(this).val();
+
+                    CategoryList.push(v);
+                });
+
+                checkboxesType.each(function () {
+                    var value = $(this).val();
+
+                    TypeList.push(value);
+                });
+
+                console.log(CategoryList);
+                console.log(TypeList);
+                var prId = document.getElementById("ProId").value;
+                var ProName = document.getElementById("ProDisplayName").value;
+
+                var vmEdit = {
+                    "ProId": prId,
+                    "ProDisplayName": ProName,
+                    "Cats": CategoryList,
+                    "Types": TypeList
+                }
+
+                $.ajax({
+
+                    type: 'POST',
+                    url: '@Url.Action("SaveChange")',
+                    dataType: 'json',
+                    data: vmEdit,
+
+                    success: function (data) {
+                        window.location.href = "/Profiles/Index";
+
+                    },
+
+                });
+
+            });
+
+        });
+
+</script>
+
